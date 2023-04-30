@@ -23,13 +23,17 @@ async function createContact(req, res) {
 }
 
 async function updateContact(req, res) {
+  if (!Object.keys(req.body).length) {
+    throw HttpError(400, "missing fields");
+  }
+
   const data = await services.updateContact(req.params.contactId, req.body);
 
   if (!data) {
     throw HttpError(404);
   }
 
-  res.status(200).json(data);
+  res.json(data);
 }
 
 async function deleteContact(req, res) {

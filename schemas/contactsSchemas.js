@@ -12,4 +12,10 @@ const createSchema = Joi.object({
   }),
 });
 
-module.exports = { createSchema };
+const updateSchema = Joi.object({
+  name: Joi.string(),
+  phone: Joi.string(),
+  email: Joi.string(),
+});
+
+module.exports = { createSchema, updateSchema };

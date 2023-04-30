@@ -57,9 +57,9 @@ async function updateContact(contactId, { name, email, phone }) {
     return null;
   }
 
-  contacts[index].name = name;
-  contacts[index].email = email;
-  contacts[index].phone = phone;
+  contacts[index].name = name ? name : contacts[index].name;
+  contacts[index].email = email ? email : contacts[index].email;
+  contacts[index].phone = phone ? phone : contacts[index].phone;
 
   writeContacts(contacts);
   return contacts[index];

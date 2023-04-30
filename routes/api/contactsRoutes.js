@@ -13,7 +13,7 @@ router.post(
 router.get("/:contactId", controllers.getContact);
 router.put(
   "/:contactId",
-  validateContact(contactsSchemas.createSchema),
+  validateContact(contactsSchemas.updateSchema),
   controllers.updateContact
 );
 router.delete("/:contactId", controllers.deleteContact);
