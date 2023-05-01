@@ -1,4 +1,4 @@
-const HttpError = require("../helpers");
+const { HttpError } = require("../helpers");
 
 function ctrlWrapper(ctrl) {
   return async function (req, res, next) {
