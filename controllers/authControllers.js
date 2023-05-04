@@ -61,7 +61,7 @@ async function current(req, res) {
   res.json({ email: req.user.email, subscription: req.user.subscription });
 }
 
-async function users(req, res) {
+async function changeSubscription(req, res) {
   const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {
     new: true,
   });
@@ -76,5 +76,5 @@ module.exports = {
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
-  users: ctrlWrapper(users),
+  changeSubscription: ctrlWrapper(changeSubscription),
 };
