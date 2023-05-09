@@ -3,12 +3,23 @@ const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../decorators");
 
 async function getAllContacts(req, res) {
-  const data = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = Infinity, favorite = false } = req.query;
+  const skip = (page - 1) * limit;
+  const searchParams = favorite ? { owner, favorite } : { owner };
+  const data = await Contact.find(searchParams, "", { skip, limit }).populate(
+    "owner",
+    "email subscription -_id"
+  );
   res.json(data);
 }
 
 async function getContact(req, res) {
-  const data = await Contact.findById(req.params.id);
+  const { _id: owner } = req.user;
+  const data = await Contact.findOne({ _id: req.params.id, owner }).populate(
+    "owner",
+    "email subscription -_id"
+  );
 
   if (!data) {
     throw HttpError(404);
@@ -18,7 +29,8 @@ async function getContact(req, res) {
 }
 
 async function createContact(req, res) {
-  const data = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const data = await Contact.create({ ...req.body, owner });
   res.status(201).json(data);
 }
 
@@ -27,9 +39,12 @@ async function updateContact(req, res) {
     throw HttpError(400, "missing fields");
   }
 
-  const data = await Contact.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
+  const { _id: owner } = req.user;
+  const data = await Contact.findOneAndUpdate(
+    { _id: req.params.id, owner },
+    req.body,
+    { new: true }
+  );
 
   if (!data) {
     throw HttpError(404);
@@ -43,9 +58,12 @@ async function updateStatusContact(req, res) {
     throw HttpError(400, "missing fields");
   }
 
-  const data = await Contact.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
+  const { _id: owner } = req.user;
+  const data = await Contact.findOneAndUpdate(
+    { _id: req.params.id, owner },
+    req.body,
+    { new: true }
+  );
 
   if (!data) {
     throw HttpError(404);
@@ -55,7 +73,8 @@ async function updateStatusContact(req, res) {
 }
 
 async function deleteContact(req, res) {
-  const data = await Contact.findByIdAndDelete(req.params.id);
+  const { _id: owner } = req.user;
+  const data = await Contact.findOneAndDelete({ _id: req.params.id, owner });
 
   if (!data) {
     throw HttpError(404);

@@ -10,7 +10,7 @@ function ctrlWrapper(ctrl) {
   };
 }
 
-function validateContact(schema) {
+function validateBody(schema) {
   return function (req, res, next) {
     const { error } = schema.validate(req.body);
 
@@ -21,4 +21,4 @@ function validateContact(schema) {
   };
 }
 
-module.exports = { ctrlWrapper, validateContact };
+module.exports = { ctrlWrapper, validateBody };
